@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,6 +9,7 @@ import { EquipoModule } from './equipo/equipo.module';
 import { PartidoModule } from './partido/partido.module';
 import { ResultadoModule } from './resultado/resultado.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { BasicAuthMiddleware } from './middleware/basic-auth.middleware';
 
 @Module({
   imports: [
@@ -21,8 +24,6 @@ import { PrismaModule } from './prisma/prisma.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware) // assuming you want to add some some loggerMiddleware then you can add it here
-      .forRoutes('*');
+    consumer.apply(LoggerMiddleware, BasicAuthMiddleware).forRoutes('*');
   }
 }
